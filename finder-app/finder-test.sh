@@ -2,6 +2,10 @@
 # Tester script for assignment 1 and assignment 2
 # Author: Siddhant Jajoo
 
+PATH=~/arm-cross-compiler/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin:$PATH
+make clean
+make default
+
 set -e
 set -u
 
@@ -54,7 +58,7 @@ fi
 
 for i in $( seq 1 $NUMFILES)
 do
-	./writer.sh "$WRITEDIR/${username}$i.txt" "$WRITESTR"
+	./writer "$WRITEDIR/${username}$i.txt" "$WRITESTR"
 done
 
 OUTPUTSTRING=$(./finder.sh "$WRITEDIR" "$WRITESTR")
