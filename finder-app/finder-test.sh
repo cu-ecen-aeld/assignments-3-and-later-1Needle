@@ -2,10 +2,6 @@
 # Tester script for assignment 1 and assignment 2
 # Author: Siddhant Jajoo
 
-PATH=~/arm-cross-compiler/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin:$PATH
-make clean
-make default
-
 set -e
 set -u
 

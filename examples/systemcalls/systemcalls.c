@@ -1,4 +1,8 @@
 #include "systemcalls.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <fcntl.h>
 
 /**
  * @param cmd the command to execute with system()
@@ -9,7 +13,9 @@
 */
 bool do_system(const char *cmd)
 {
-
+	int status = system(cmd);
+	if(status == -1 || status == 127)
+		return false;
 /*
  * TODO  add your code here
  *  Call the system() function with the command set in the cmd
@@ -49,6 +55,25 @@ bool do_exec(int count, ...)
     // and may be removed
     command[count] = command[count];
 
+    pid_t pid = fork();
+    if(pid == -1)
+	    return false;
+    if(pid == 0)
+    {
+	if(execv(command[0], command) == -1)
+		exit(1);
+    }
+    else
+    {
+	int status;
+	if(waitpid(pid, &status, 0) == -1)
+		return false;
+	if(!WIFEXITED(status))
+		return false;
+	if(WEXITSTATUS(status) != 0)
+		return false;
+    }
+    
 /*
  * TODO:
  *   Execute a system command by calling fork, execv(),
@@ -83,6 +108,33 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
     // this line is to avoid a compile warning before your implementation is complete
     // and may be removed
     command[count] = command[count];
+
+    int fd = open(outputfile, O_WRONLY | O_CREAT | O_TRUNC, 644);
+    if(fd < 0)
+	return false;
+
+    int pid = fork();
+    if(pid < 0)
+	    return false;
+    if(pid == 0)
+    {
+	    if(dup2(fd, 1) < 0)
+		    return false;
+	    if(execv(command[0], command) == -1)
+		    exit(1);
+    }
+    else
+    {
+	    int status;
+	    if(waitpid(pid, &status, 0) == -1)
+		    return false;
+	    if(!WIFEXITED(status))
+		    return false;
+	    if(WEXITSTATUS(status) != 0)
+		    return false;
+    }
+
+			    
 
 
 /*
