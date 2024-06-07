@@ -5,6 +5,6 @@ default:
 	gcc writer.c -o writer
 
 clean:
-	rm -r writer
+	rm -r -f writer
 
 
