@@ -1,21 +1,15 @@
-CC = gcc
+# Compiler options
+CC = $(CROSS_COMPILE)gcc
+# CROSS_COMPILE = aarch64-none-linux-gnu
 CFLAGS = -Wall -Wextra -Werror
 
-TARGET = aesdsocket
-SRCS = aesdsocket.c
-OBJS = $(SRCS:.c=.o)
-DESTINATION = /var/tmp/aesdsocketdata
+all: aesdsocket
 
-.PHONY: all clean
+aesdsocket: aesdsocket.o
+	$(CC) $(CFLAGS) -o aesdsocket aesdsocket.o
 
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+aesdsocket.o: aesdsocket.c
+	$(CC) $(CFLAGS) -c aesdsocket.c
 
 clean:
-	rm -f $(OBJS) $(TARGET) $(DESTINATION)
-
+	rm -f aesdsocket *.o
