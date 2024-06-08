@@ -1,15 +1,13 @@
-all: writer
+CC:=$(CROSS_COMPILE)gcc
+exe:=writer
+obj:=writer.o
 
-writer: writer.c
-	gcc writer.c -o writer
+all:$(obj)
+	$(CC) -o $(exe) $(obj)  
+%.o:%.c
+	$(CC) -c $^ -o $@
 
-CROSS_COMPILE:
-	$(CROSS_COMPILE)gcc writer.c -o writer
-
-default:
-	gcc writer.c -o writer
-
+.PHONY:clean
 clean:
-	rm -r -f writer
-
+	rm -rf $(obj) $(exe)
 
